@@ -200,16 +200,16 @@ input[type="text"], input[type="number"], textarea {
 /* 2. The Group: holds runners and handles animation */
 .chase-group {
     display: flex;
-    align-items: flex-end; /* elements sit on ground */
-    gap: 15px; /* space between baby/cats */
+    align-items: flex-end; 
+    gap: 15px; 
     position: absolute;
-    bottom: 5px; /* spacing from very edge */
+    bottom: 5px; 
     left: 0;
-    width: 180px; /* Approximate width of whole group */
-    transform: translateX(-100%); /* start off-screen left */
+    width: 180px; 
+    transform: translateX(-100%); 
     
-    /* 20 second loop: handled in keyframes below */
-    animation: chaseSequence 20s ease-in-out infinite;
+    /* CHANGED: Increased from 20s to 35s to make them run much slower */
+    animation: chaseSequence 35s ease-in-out infinite;
 }
 
 /* 3. Base Styles for Assets (Placeholders) */
@@ -272,16 +272,16 @@ input[type="text"], input[type="number"], textarea {
 ========================================= */
 @media (max-width: 600px) {
     :root {
-        --baby-w: 30px; /* Extra small on mobile */
-        --baby-h: 30px;
-        --cat-w: 20px;
-        --cat-h: 20px;
+        --baby-w: 45px; 
+        --baby-h: 45px;
+        --cat-w: 30px;
+        --cat-h: 30px;
     }
     .animation-wrapper {
-        height: 40px;
+        height: 55px; 
     }
     .chase-group {
-        gap: 5px; /* tighter spacing */
-        width: 90px;
+        gap: 8px; 
+        width: 130px; 
     }
 }
