@@ -261,10 +261,10 @@ input[type="text"], input[type="number"], textarea {
     48% { transform: translateX(100vw) scaleX(-1); }  /* Short pause flipped */
     
     /* --- Phase 2: Right -> Left --- */
-    95% { transform: translateX(-200px) scaleX(-1); } /* Back across to Left, offset group width */
+    95% { transform: translateX(-100%) scaleX(-1); } /* Back across to Left, offset group width */
     
     /* --- Long Pause before restart --- */
-    100% { transform: translateX(-200px) scaleX(-1); }
+    100% { transform: translateX(-100%) scaleX(-1); }
 }
 
 /* =========================================
