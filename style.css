@@ -54,7 +54,13 @@ h1, h2 {
     /*-webkit-text-stroke: 1px #ffffff;*/
     
     /* Optional: If the outline looks too thin, delete the line above and use this shadow method instead: */
-    text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; */
+    /*text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; */
+    /* Creates a 1px outline strictly BEHIND the text */
+    text-shadow: 
+        -1px -1px 0 #ffffff,  
+         1px -1px 0 #ffffff,
+        -1px  1px 0 #ffffff,
+         1px  1px 0 #ffffff;
 }
 
 h1 { font-size: 3em; }
@@ -141,11 +147,5 @@ input[type="text"], input[type="number"], textarea {
     .map-text {
         /* Makes the text slightly smaller to fit better next to the tiny map */
         font-size: 0.9em; 
-    }
-
-    /* NEW: Typography Rules for Mobile */
-    h1, h2 {
-        /* Shrinks the white outline on phones so the green shows through */
-        -webkit-text-stroke: 0.3px #ffffff; 
     }
 }
