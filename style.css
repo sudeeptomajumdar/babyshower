@@ -121,13 +121,20 @@ input[type="text"], input[type="number"], textarea {
     box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Adds a subtle shadow */
 }
 
-/* Mobile Responsiveness: Stacks them on smaller screens */
+/* Mobile Responsiveness: Makes the map tiny on small screens */
 @media (max-width: 600px) {
     .map-layout {
-        flex-direction: column;
+        /* Keeps the map on the left and text on the right */
+        flex-direction: row; 
+        align-items: flex-start;
     }
     .square-map {
-        width: 100%; /* Makes the map full width on phones */
-        height: 250px;
+        /* Makes the map a tiny 100x100 square on phones */
+        width: 100px; 
+        height: 100px;
+    }
+    .map-text {
+        /* Makes the text slightly smaller to fit better next to the tiny map */
+        font-size: 0.9em; 
     }
 }
