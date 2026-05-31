@@ -101,6 +101,23 @@ input[type="text"], input[type="number"], textarea {
 .btn:hover { opacity: 0.9; }
 .registry-section .btn { margin: 10px; }
 
+/* --- RADIO BUTTON GROUPS --- */
+.radio-group {
+    margin-top: 15px;
+    background: rgba(0,0,0,0.03);
+    padding: 10px 15px;
+    border-radius: 8px;
+}
+
+.radio-group p {
+    margin: 0 0 10px 0;
+}
+
+.radio-group label {
+    font-weight: normal; /* Makes radio labels visually distinct from main field labels */
+    margin-right: 15px;
+    cursor: pointer;
+}
 /* --- GUESTBOOK --- */
 .message-card {
     background: #f4f4f4;
