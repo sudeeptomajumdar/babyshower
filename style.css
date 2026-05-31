@@ -34,6 +34,10 @@ body {
     max-width: 800px;
     margin: 40px auto;
     padding: 40px;
+    
+    /* NEW: Pushes main content up so animation doesn't cover text */
+    padding-bottom: 80px; 
+    
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     text-align: var(--text-alignment);
@@ -164,5 +168,111 @@ input[type="text"], input[type="number"], textarea {
     .map-text {
         /* Makes the text slightly smaller to fit better next to the tiny map */
         font-size: 0.9em; 
+    }
+    .invitation-container {
+        padding-bottom: 60px; /* NEW: Sightly less space needed on mobile */
+    }
+}
+/* =========================================
+   ANIMATED BABY CHASE SECTION
+========================================= */
+
+/* Defining asset sizes as variables for easy tweaking */
+:root {
+    --baby-w: 60px; /* Standard size */
+    --baby-h: 60px;
+    --cat-w: 40px;
+    --cat-h: 40px;
+}
+
+/* 1. The Container: fixed to bottom of screen */
+.animation-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 70px; /* Container taller than assets */
+    overflow: hidden; /* start/end off-screen */
+    z-index: 100; /* above background, below cards */
+    pointer-events: none; /* Make clicks pass through to forms */
+}
+
+/* 2. The Group: holds runners and handles animation */
+.chase-group {
+    display: flex;
+    align-items: flex-end; /* elements sit on ground */
+    gap: 15px; /* space between baby/cats */
+    position: absolute;
+    bottom: 5px; /* spacing from very edge */
+    left: 0;
+    width: 180px; /* Approximate width of whole group */
+    transform: translateX(-100%); /* start off-screen left */
+    
+    /* 20 second loop: handled in keyframes below */
+    animation: chaseSequence 20s ease-in-out infinite;
+}
+
+/* 3. Base Styles for Assets (Placeholders) */
+.animation-asset {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+}
+
+/* !!! REPLACE colored backgrounds with your transparent image URLs !!! */
+.baby {
+    width: var(--baby-w); height: var(--baby-h);
+    /* background-image: url('YOUR_TRANSPARENT_BABY_IMAGE.png'); */
+    background-color: rgba(255,192,203,0.7); border-radius: 50%; /* Pink Circle Placeholder */
+}
+.cat {
+    width: var(--cat-w); height: var(--cat-h);
+    /* background-image: url('YOUR_TRANSPARENT_CAT_IMAGE.png'); */
+    background-color: rgba(128,128,128,0.7); border-radius: 5px; /* Gray Square Placeholder */
+}
+
+/* Flexbox Order: baby leftmost in group chases cats ahead on right */
+.chase-group .baby { order: 1; }
+.chase-group .cat2 { order: 2; }
+.chase-group .cat1 { order: 3; }
+
+/* =========================================
+   KEYFRAMES (The Animation Script)
+   This loop takes 20 seconds.
+========================================= */
+@keyframes chaseSequence {
+    /* --- Phase 1: Left -> Right --- */
+    0% { transform: translateX(-100%) scaleX(1); }    /* Start: Off-screen Left */
+    1s { transform: translateX(-100%) scaleX(1); }   /* Short delay before move */
+    25% { transform: translateX(100vw) scaleX(1); }   /* Arrive: Off-screen Right */
+    
+    /* --- Pause and Flip --- */
+    30% { transform: translateX(100vw) scaleX(1); }   /* Wait Off-screen Right */
+    31% { transform: translateX(100vw) scaleX(-1); }  /* Flip facing Left */
+    35% { transform: translateX(100vw) scaleX(-1); }  /* Short pause flipped */
+    
+    /* --- Phase 2: Right -> Left --- */
+    60% { transform: translateX(-200px) scaleX(-1); } /* Back across to Left, offset group width */
+    
+    /* --- Long Pause before restart --- */
+    100% { transform: translateX(-200px) scaleX(-1); }
+}
+
+/* =========================================
+   MOBILE RESPONSIVENESS (Tiny Assets)
+========================================= */
+@media (max-width: 600px) {
+    :root {
+        --baby-w: 30px; /* Extra small on mobile */
+        --baby-h: 30px;
+        --cat-w: 20px;
+        --cat-h: 20px;
+    }
+    .animation-wrapper {
+        height: 40px;
+    }
+    .chase-group {
+        gap: 5px; /* tighter spacing */
+        width: 90px;
     }
 }
