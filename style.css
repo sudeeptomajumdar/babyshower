@@ -272,13 +272,13 @@ input[type="text"], input[type="number"], textarea {
 ========================================= */
 @media (max-width: 600px) {
     :root {
-        --baby-w: 45px; 
-        --baby-h: 45px;
-        --cat-w: 30px;
-        --cat-h: 30px;
+        --baby-w: 60px; 
+        --baby-h: 60px;
+        --cat-w: 45px;
+        --cat-h: 45px;
     }
     .animation-wrapper {
-        height: 55px; 
+        height: 70px; 
     }
     .chase-group {
         gap: 8px; 
