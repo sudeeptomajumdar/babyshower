@@ -50,6 +50,11 @@ h1, h2 {
     font-family: var(--font-headers);
     color: var(--text-accent);
     margin-bottom: 15px;
+    /* Adds a crisp 1-pixel white outline to the text */
+    -webkit-text-stroke: 1px #ffffff;
+    
+    /* Optional: If the outline looks too thin, delete the line above and use this shadow method instead: */
+    /* text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; */
 }
 
 h1 { font-size: 3em; }
