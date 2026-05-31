@@ -3,7 +3,7 @@
     /* Backgrounds */
     --bg-image: url('IMG-20260530-WA0002.jpg'); /* Replace with your image URL */
     --bg-color: #fdfbf7;
-    --card-bg: rgba(255, 255, 255, 0.95);
+    --card-bg: rgba(255, 255, 255, 0.5);
     
     /* Typography */
     --font-headers: 'Petit Formal Script', cursive;
@@ -24,11 +24,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: var(--bg-image);
     background-color: var(--bg-color);
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
     font-family: var(--font-body);
     color: var(--text-primary);
     line-height: var(--line-spacing);
@@ -37,11 +33,16 @@ body {
 .invitation-container {
     max-width: 800px;
     margin: 40px auto;
-    background: var(--card-bg);
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     text-align: var(--text-alignment);
+
+    /* The Magic: Stacks the see-through white color ON TOP of your image */
+    background: linear-gradient(var(--card-bg), var(--card-bg)), var(--bg-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* --- TYPOGRAPHY --- */
