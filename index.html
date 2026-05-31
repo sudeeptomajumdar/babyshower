@@ -56,25 +56,41 @@
 
         <section class="rsvp-section">
             <h2>RSVP</h2>
-            <form id="rsvpForm">
+                        <form id="rsvpForm">
                 <label for="name">Your Name:</label>
                 <input type="text" id="name" required>
 
-                <label for="guests">Total Number of Guests (Including yourself):</label>
-                <input type="number" id="guests" min="0" max="4" value="1" required>
+                <label for="email">Email Address (Used to edit your RSVP later):</label>
+                <input type="email" id="email" required>
+
+                <div class="radio-group">
+                    <p><strong>Will you be attending?</strong></p>
+                    <input type="radio" id="status-yes" name="status" value="yes" checked>
+                    <label for="status-yes">Yes</label>
+                    
+                    <input type="radio" id="status-maybe" name="status" value="maybe">
+                    <label for="status-maybe">Maybe</label>
+                    
+                    <input type="radio" id="status-no" name="status" value="no">
+                    <label for="status-no">No</label>
+                </div>
+
+                <label for="guests">Total Guests (Including yourself):</label>
+                <input type="number" id="guests" min="1" max="4" value="1" required>
 
                 <label for="message">Leave a Message for the Parents-to-be:</label>
                 <textarea id="message" rows="4"></textarea>
 
-                <div class="privacy-toggle">
-                    <p>Message Privacy:</p>
+                <div class="radio-group">
+                    <p><strong>Message Privacy:</strong></p>
                     <input type="radio" id="public" name="privacy" value="public" checked>
                     <label for="public">Public (Everyone can see)</label>
+                    
                     <input type="radio" id="private" name="privacy" value="private">
                     <label for="private">Private (Only hosts can see)</label>
                 </div>
 
-                <button type="submit" class="btn rsvp-btn">Submit RSVP</button>
+                <button type="submit" class="btn rsvp-btn">Submit / Update RSVP</button>
             </form>
         </section>
 
