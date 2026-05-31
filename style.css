@@ -209,7 +209,7 @@ input[type="text"], input[type="number"], textarea {
     transform: translateX(-100%); 
     
     /* CHANGED: Increased from 20s to 35s to make them run much slower */
-    animation: chaseSequence 35s ease-in-out infinite;
+    animation: chaseSequence 25s ease-in-out infinite;
 }
 
 /* 3. Base Styles for Assets (Placeholders) */
