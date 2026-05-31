@@ -219,16 +219,24 @@ input[type="text"], input[type="number"], textarea {
     background-position: bottom center;
 }
 
-/* !!! REPLACE colored backgrounds with your transparent image URLs !!! */
 .baby {
-    width: var(--baby-w); height: var(--baby-h);
-    /* background-image: url('YOUR_TRANSPARENT_BABY_IMAGE.png'); */
-    background-color: rgba(255,192,203,0.7); border-radius: 50%; /* Pink Circle Placeholder */
+    width: var(--baby-w); 
+    height: var(--baby-h);
+    background-color: transparent; /* Removes the pink placeholder color */
+    border-radius: 0;
+    
+    /* Paste the URL to your animated baby GIF here: */
+    background-image: url('YOUR_ANIMATED_BABY_GIF_URL_HERE.gif'); 
 }
+
 .cat {
-    width: var(--cat-w); height: var(--cat-h);
-    /* background-image: url('YOUR_TRANSPARENT_CAT_IMAGE.png'); */
-    background-color: rgba(128,128,128,0.7); border-radius: 5px; /* Gray Square Placeholder */
+    width: var(--cat-w); 
+    height: var(--cat-h);
+    background-color: transparent; /* Removes the gray placeholder color */
+    border-radius: 0;
+    
+    /* LIVE EXAMPLE: A transparent, animated running cat from Wikimedia */
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Transparent_Cartoon_Running_Cat.gif');
 }
 
 /* Flexbox Order: baby leftmost in group chases cats ahead on right */
