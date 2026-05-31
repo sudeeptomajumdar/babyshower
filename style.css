@@ -1,7 +1,7 @@
 /* --- CUSTOMIZATION VARIABLES --- */
 :root {
     /* Backgrounds */
-    --bg-image: url('https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&q=80'); /* Replace with your image URL */
+    --bg-image: url('IMG-20260530-WA0002.jpg'); /* Replace with your image URL */
     --bg-color: #fdfbf7;
     --card-bg: rgba(255, 255, 255, 0.95);
     
