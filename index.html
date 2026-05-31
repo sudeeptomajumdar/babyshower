@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Shower Invitation</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="invitation-container">
+        <header class="header-section">
+            <h1>You're Invited!</h1>
+            <p class="subtitle">Join us to celebrate the upcoming arrival of baby [Name]!</p>
+        </header>
+
+        <section class="details-section">
+            <h2>The Details</h2>
+            <p><strong>Hosted By:</strong> [Host Name(s)]</p>
+            <p><strong>Date & Time:</strong> Saturday, October 14th at 2:00 PM</p>
+            <p><strong>Venue:</strong> [Venue Name], [Venue Address]</p>
+            <p class="highlight"><strong>Please RSVP by:</strong> September 30th</p>
+        </section>
+
+        <section class="info-section">
+            <h2>Important Info</h2>
+            <p>Diaper raffle! Bring a pack of diapers (any size) to be entered to win a special prize.</p>
+        </section>
+
+        <section class="map-section">
+            <h2>Location & Parking</h2>
+            <p>Street parking is available on Main St. and 1st Ave. There is also a free parking lot behind the venue.</p>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019284241031!2d-122.41941548468205!3d37.77492947975903!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c6c8f4459%3A0xb10ed6d9b5050f14!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1614275066367!5m2!1sen!2sus" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </section>
+
+        <section class="registry-section">
+            <h2>Registry</h2>
+            <p>Your presence is the best gift, but if you'd like to help us prepare, we are registered at:</p>
+            <a href="[YOUR_LINK]" target="_blank" class="btn">Target Registry</a>
+            <a href="[YOUR_LINK]" target="_blank" class="btn">Amazon Registry</a>
+        </section>
+
+        <section class="rsvp-section">
+            <h2>RSVP</h2>
+            <form id="rsvpForm">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" required>
+
+                <label for="guests">Total Number of Guests (Including yourself):</label>
+                <input type="number" id="guests" min="0" max="4" value="1" required>
+
+                <label for="message">Leave a Message for the Parents-to-be:</label>
+                <textarea id="message" rows="4"></textarea>
+
+                <div class="privacy-toggle">
+                    <p>Message Privacy:</p>
+                    <input type="radio" id="public" name="privacy" value="public" checked>
+                    <label for="public">Public (Everyone can see)</label>
+                    <input type="radio" id="private" name="privacy" value="private">
+                    <label for="private">Private (Only hosts can see)</label>
+                </div>
+
+                <button type="submit" class="btn rsvp-btn">Submit RSVP</button>
+            </form>
+        </section>
+
+        <section class="guestbook-section">
+            <h2>Guestbook & Responses</h2>
+            <p id="totalRsvps">Total Guests Attending: <strong>0</strong></p>
+            <div id="publicMessages">
+                </div>
+        </section>
+
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
