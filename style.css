@@ -99,3 +99,35 @@ input[type="text"], input[type="number"], textarea {
     text-align: left;
     border-left: 4px solid var(--text-accent);
 }
+/* --- MAP LAYOUT --- */
+.map-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    text-align: left; /* Keeps text readable next to the map */
+    margin-top: 15px;
+}
+
+.map-text {
+    flex: 1; /* Tells the text to take up all leftover space */
+}
+
+.square-map {
+    width: 250px;
+    height: 250px;
+    flex-shrink: 0; /* Prevents the map from shrinking */
+    border-radius: 8px; /* Gives the map soft, modern corners */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Adds a subtle shadow */
+}
+
+/* Mobile Responsiveness: Stacks them on smaller screens */
+@media (max-width: 600px) {
+    .map-layout {
+        flex-direction: column;
+    }
+    .square-map {
+        width: 100%; /* Makes the map full width on phones */
+        height: 250px;
+    }
+}
