@@ -252,16 +252,16 @@ input[type="text"], input[type="number"], textarea {
 @keyframes chaseSequence {
     /* --- Phase 1: Left -> Right --- */
     0% { transform: translateX(-100%) scaleX(1); }    /* Start: Off-screen Left */
-    1s { transform: translateX(-100%) scaleX(1); }   /* Short delay before move */
-    25% { transform: translateX(100vw) scaleX(1); }   /* Arrive: Off-screen Right */
+    0.5s { transform: translateX(-100%) scaleX(1); }   /* Short delay before move */
+    45% { transform: translateX(100vw) scaleX(1); }   /* Arrive: Off-screen Right */
     
     /* --- Pause and Flip --- */
-    30% { transform: translateX(100vw) scaleX(1); }   /* Wait Off-screen Right */
-    31% { transform: translateX(100vw) scaleX(-1); }  /* Flip facing Left */
-    35% { transform: translateX(100vw) scaleX(-1); }  /* Short pause flipped */
+    46% { transform: translateX(100vw) scaleX(1); }   /* Wait Off-screen Right */
+    47% { transform: translateX(100vw) scaleX(-1); }  /* Flip facing Left */
+    48% { transform: translateX(100vw) scaleX(-1); }  /* Short pause flipped */
     
     /* --- Phase 2: Right -> Left --- */
-    60% { transform: translateX(-200px) scaleX(-1); } /* Back across to Left, offset group width */
+    95% { transform: translateX(-200px) scaleX(-1); } /* Back across to Left, offset group width */
     
     /* --- Long Pause before restart --- */
     100% { transform: translateX(-200px) scaleX(-1); }
