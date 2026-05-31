@@ -236,7 +236,7 @@ input[type="text"], input[type="number"], textarea {
     border-radius: 0;
     
     /* LIVE EXAMPLE: A transparent, animated running cat from Wikimedia */
-    background-image: url('giphy.gif');
+    background-image: url('ezgif-64fbbfff3bd3d20e.gif');
     transform: scaleX(-1);
 }
 
