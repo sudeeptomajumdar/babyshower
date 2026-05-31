@@ -237,6 +237,7 @@ input[type="text"], input[type="number"], textarea {
     
     /* LIVE EXAMPLE: A transparent, animated running cat from Wikimedia */
     background-image: url('giphy.gif');
+    transform: scaleX(-1);
 }
 
 /* Flexbox Order: baby leftmost in group chases cats ahead on right */
