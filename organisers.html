@@ -80,10 +80,12 @@
         
         <form id="loginForm" action="javascript:void(0);" onsubmit="handleLogin(event)">
             
-            <input type="text" id="adminUser" autocomplete="username" value="admin" style="position: absolute; left: -9999px;" tabindex="-1" aria-hidden="true">
-            
-            <input type="password" id="adminPass" autocomplete="current-password" placeholder="Password" required style="padding: 10px; width: 80%; margin-bottom: 20px; font-size: 16px;">
+            <input type="text" id="adminUser" autocomplete="username" value="admin" placeholder="Username" required style="padding: 10px; width: 80%; margin-bottom: 15px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;">
             <br>
+            
+            <input type="password" id="adminPass" autocomplete="current-password" placeholder="Password" required style="padding: 10px; width: 80%; margin-bottom: 20px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;">
+            <br>
+            
             <button type="submit" class="btn">Log In</button>
         </form>
     </div>
