@@ -16,6 +16,48 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// --- NEW: Auto-populate form when email is entered ---
+// The 'blur' event fires the moment they click or tab out of the email box
+document.getElementById('email').addEventListener('blur', async (e) => {
+    const emailInput = e.target.value.trim().toLowerCase();
+    
+    // If the box is empty, don't do anything
+    if (!emailInput) return; 
+
+    try {
+        // Search the database for this exact email
+        const rsvpsRef = collection(db, "rsvps");
+        const q = query(rsvpsRef, where("email", "==", emailInput));
+        const querySnapshot = await getDocs(q);
+
+        // If a match is found, fill in the form!
+        if (!querySnapshot.empty) {
+            const existingData = querySnapshot.docs[0].data();
+            
+            // Populate the text and number fields
+            document.getElementById('name').value = existingData.name || '';
+            document.getElementById('guests').value = existingData.guests || 1;
+            document.getElementById('message').value = existingData.message || '';
+            
+            // Check the correct Attendance Status radio button
+            if (existingData.status) {
+                const statusRadio = document.querySelector(`input[name="status"][value="${existingData.status}"]`);
+                if (statusRadio) statusRadio.checked = true;
+            }
+            
+            // Check the correct Privacy radio button
+            if (existingData.privacy) {
+                const privacyRadio = document.querySelector(`input[name="privacy"][value="${existingData.privacy}"]`);
+                if (privacyRadio) privacyRadio.checked = true;
+            }
+            
+            console.log("Previous RSVP found and populated.");
+        }
+    } catch (error) {
+        console.error("Error fetching existing RSVP:", error);
+    }
+});
+// -----------------------------------------------------
 // Handle Form Submission (Create or Update)
 document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
     e.preventDefault();
