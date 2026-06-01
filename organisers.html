@@ -78,8 +78,9 @@
         <h2>Organizer Access</h2>
         <p>Please enter the password to view RSVPs.</p>
         
-        <form id="loginForm" onsubmit="handleLogin(event)">
-            <input type="text" id="adminUser" autocomplete="username" value="Organizer" style="display: none;">
+        <form id="loginForm" action="javascript:void(0);" onsubmit="handleLogin(event)">
+            
+            <input type="text" id="adminUser" autocomplete="username" value="admin" style="position: absolute; left: -9999px;" tabindex="-1" aria-hidden="true">
             
             <input type="password" id="adminPass" autocomplete="current-password" placeholder="Password" required style="padding: 10px; width: 80%; margin-bottom: 20px; font-size: 16px;">
             <br>
