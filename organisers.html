@@ -89,9 +89,12 @@
     </div>
 
     <div id="dashboardScreen" class="dashboard-container" style="display: none;">
-        <div class="header-bar">
+                <div class="header-bar">
             <h1>Organizer RSVP Dashboard</h1>
-            <button class="btn" onclick="downloadCSV()">⬇ Download for Excel</button>
+            <div>
+                <button class="btn" onclick="logout()" style="background-color: #555; margin-right: 10px;">Log Out</button>
+                <button class="btn" onclick="downloadCSV()">⬇ Download for Excel</button>
+            </div>
         </div>
         
         <p style="font-size: 1.2em;">Total Guests Attending: <strong id="totalCount">0</strong></p>
@@ -136,9 +139,8 @@
 
     <script>
                 // 1. The NEW Form Submission Handler
-                // 1. The Form Submission Handler with Credential API
+               // 1. The Form Submission Handler
         async function handleLogin(event) {
-            // Stop the page from reloading
             event.preventDefault(); 
             
             const usernameInput = document.getElementById('adminUser').value;
@@ -146,8 +148,7 @@
             
             if (passwordInput === 'babyshower2026' && usernameInput === 'admin') { 
                 
-                // --- NEW: THE BROWSER COMMAND ---
-                // This explicitly tells the browser to prompt the user to save the password
+                // Prompt to save password
                 if (window.PasswordCredential && navigator.credentials) {
                     const cred = new PasswordCredential({
                         id: usernameInput,
@@ -159,7 +160,10 @@
                         console.log("Browser blocked password save prompt:", err);
                     }
                 }
-                // ---------------------------------
+
+                // --- NEW: Save the login state in the browser's memory ---
+                sessionStorage.setItem('isLoggedIn', 'true');
+                // ---------------------------------------------------------
 
                 // Hide login screen, show dashboard
                 document.getElementById('loginScreen').style.display = 'none';
@@ -171,6 +175,25 @@
                 document.getElementById('adminPass').value = ''; 
             }
         }
+
+        // --- NEW: Log Out Function ---
+        function logout() {
+            // Remove the sticky note and refresh the page to lock it
+            sessionStorage.removeItem('isLoggedIn');
+            window.location.reload();
+        }
+        // ------------------------------
+
+        // --- NEW: Check for login state exactly when the page opens ---
+        window.onload = function() {
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                // If the sticky note is there, skip the login screen!
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboardScreen').style.display = 'block';
+                loadData();
+            }
+        };
+        // --------------------------------------------------------------
 
         // 2. The Data Loader
         async function loadData() {
