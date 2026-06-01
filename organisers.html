@@ -79,16 +79,11 @@
         <h2>Organizer Access</h2>
         <p>Please enter the password to view RSVPs.</p>
         
-        <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
-        
-        <form id="loginForm" target="dummyframe" method="GET" action="#" onsubmit="return handleLogin()">
-            
+        <form id="loginForm" onsubmit="handleLogin(event)">
             <input type="text" id="adminUser" name="username" autocomplete="username" value="admin" placeholder="Username" required style="padding: 10px; width: 80%; margin-bottom: 15px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;">
             <br>
-            
             <input type="password" id="adminPass" name="password" autocomplete="current-password" placeholder="Password" required style="padding: 10px; width: 80%; margin-bottom: 20px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;">
             <br>
-            
             <button type="submit" class="btn">Log In</button>
         </form>
     </div>
@@ -141,24 +136,39 @@
 
     <script>
                 // 1. The NEW Form Submission Handler
-        function handleLogin() {
+                // 1. The Form Submission Handler with Credential API
+        async function handleLogin(event) {
+            // Stop the page from reloading
+            event.preventDefault(); 
+            
+            const usernameInput = document.getElementById('adminUser').value;
             const passwordInput = document.getElementById('adminPass').value;
             
             if (passwordInput === 'Shower2024') { 
+                
+                // --- NEW: THE BROWSER COMMAND ---
+                // This explicitly tells the browser to prompt the user to save the password
+                if (window.PasswordCredential && navigator.credentials) {
+                    const cred = new PasswordCredential({
+                        id: usernameInput,
+                        password: passwordInput
+                    });
+                    try {
+                        await navigator.credentials.store(cred);
+                    } catch (err) {
+                        console.log("Browser blocked password save prompt:", err);
+                    }
+                }
+                // ---------------------------------
+
                 // Hide login screen, show dashboard
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('dashboardScreen').style.display = 'block';
                 loadData(); 
                 
-                // NEW: Returning true allows the form to natively submit to the hidden iframe.
-                // This is the EXACT trigger the browser needs to ask "Save Password?"
-                return true; 
             } else {
                 alert("Incorrect Password!");
                 document.getElementById('adminPass').value = ''; 
-                
-                // NEW: Returning false prevents the submission so it doesn't try to save a wrong password
-                return false; 
             }
         }
 
