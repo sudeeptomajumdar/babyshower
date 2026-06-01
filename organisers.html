@@ -77,9 +77,14 @@
     <div id="loginScreen" style="max-width: 400px; margin: 100px auto; text-align: center; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
         <h2>Organizer Access</h2>
         <p>Please enter the password to view RSVPs.</p>
-        <input type="password" id="adminPass" style="padding: 10px; width: 80%; margin-bottom: 20px; font-size: 16px;">
-        <br>
-        <button class="btn" onclick="checkPassword()">Log In</button>
+        
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <input type="text" id="adminUser" autocomplete="username" value="Organizer" style="display: none;">
+            
+            <input type="password" id="adminPass" autocomplete="current-password" placeholder="Password" required style="padding: 10px; width: 80%; margin-bottom: 20px; font-size: 16px;">
+            <br>
+            <button type="submit" class="btn">Log In</button>
+        </form>
     </div>
 
     <div id="dashboardScreen" class="dashboard-container" style="display: none;">
@@ -124,38 +129,29 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        window.db = getFirestore(app); // Made global so the loadData function can access it
+        window.db = getFirestore(app); 
     </script>
 
     <script>
-        // 1. The Password Check
-        function checkPassword() {
+        // 1. The NEW Form Submission Handler
+        function handleLogin(event) {
+            // This stops the form from actually reloading the web page
+            event.preventDefault(); 
+            
             const passwordInput = document.getElementById('adminPass').value;
             
-            // TODO: Change 'Shower2024' to whatever password you want the organizers to use
-            if (passwordInput === 'babyshower2026') { 
-                
-                // Hide login screen, show dashboard
+            // TODO: Change 'Shower2024' to your desired password
+            if (passwordInput === 'Shower2024') { 
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('dashboardScreen').style.display = 'block';
-                
-                // ONLY load the database AFTER the correct password is put in
                 loadData(); 
             } else {
                 alert("Incorrect Password!");
-                document.getElementById('adminPass').value = ''; // clears the box
+                document.getElementById('adminPass').value = ''; 
             }
         }
 
-        // Allow pressing "Enter" on the keyboard to submit password
-        document.getElementById("adminPass").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                checkPassword();
-            }
-        });
-
-        // 2. The Data Loader (Same as before, just wrapped to run later)
+        // 2. The Data Loader
         async function loadData() {
             import("https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js").then(async (firestore) => {
                 try {
@@ -194,7 +190,7 @@
             });
         }
 
-        // 3. The CSV Downloader (Same as before)
+        // 3. The CSV Downloader
         function downloadCSV() {
             const table = document.getElementById("rsvpTable");
             let rows = Array.from(table.rows);
