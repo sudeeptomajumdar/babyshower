@@ -146,9 +146,10 @@
             const usernameInput = document.getElementById('adminUser').value;
             const passwordInput = document.getElementById('adminPass').value;
             
+            // TODO: Change 'Shower2024' to your actual password
             if (passwordInput === 'babyshower2026' && usernameInput === 'admin') { 
                 
-                // Prompt to save password
+                // Prompt to save password in the browser
                 if (window.PasswordCredential && navigator.credentials) {
                     const cred = new PasswordCredential({
                         id: usernameInput,
@@ -161,9 +162,13 @@
                     }
                 }
 
-                // --- NEW: Save the login state in the browser's memory ---
-                sessionStorage.setItem('isLoggedIn', 'true');
-                // ---------------------------------------------------------
+                // --- NEW: Calculate exactly 30 days from right now in milliseconds ---
+                const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
+                const expiryTimestamp = new Date().getTime() + thirtyDaysInMs;
+                
+                // Save that exact expiration time in permanent local storage
+                localStorage.setItem('adminAuthExpiry', expiryTimestamp);
+                // ---------------------------------------------------------------------
 
                 // Hide login screen, show dashboard
                 document.getElementById('loginScreen').style.display = 'none';
@@ -178,23 +183,31 @@
 
         // --- NEW: Log Out Function ---
         function logout() {
-            // Remove the sticky note and refresh the page to lock it
-            sessionStorage.removeItem('isLoggedIn');
+            // Permanently delete the 30-day token and lock the page
+            localStorage.removeItem('adminAuthExpiry');
             window.location.reload();
         }
         // ------------------------------
 
-        // --- NEW: Check for login state exactly when the page opens ---
+        // --- NEW: Check for the 30-day token when the page opens ---
         window.onload = function() {
-            if (sessionStorage.getItem('isLoggedIn') === 'true') {
-                // If the sticky note is there, skip the login screen!
+            const expiryTime = localStorage.getItem('adminAuthExpiry');
+            const currentTime = new Date().getTime();
+
+            // Check if the token exists AND if the current time is still BEFORE the expiration time
+            if (expiryTime && currentTime < parseInt(expiryTime)) {
+                
+                // You are within the 30-day window! Skip the login screen.
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('dashboardScreen').style.display = 'block';
                 loadData();
+                
+            } else {
+                // If the 30 days have passed (or you never logged in), clear out any old data
+                localStorage.removeItem('adminAuthExpiry');
             }
         };
-        // --------------------------------------------------------------
-
+        // -----------------------------------------------------------
         // 2. The Data Loader
         async function loadData() {
             import("https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js").then(async (firestore) => {
