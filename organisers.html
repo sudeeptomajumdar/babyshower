@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Organizer RSVP Dashboard</title>
+    <meta name="robots" content="noindex, nofollow">
     <style>
         /* Shared styling with your main site */
         :root {
@@ -73,7 +74,15 @@
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
+    <div id="loginScreen" style="max-width: 400px; margin: 100px auto; text-align: center; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+        <h2>Organizer Access</h2>
+        <p>Please enter the password to view RSVPs.</p>
+        <input type="password" id="adminPass" style="padding: 10px; width: 80%; margin-bottom: 20px; font-size: 16px;">
+        <br>
+        <button class="btn" onclick="checkPassword()">Log In</button>
+    </div>
+
+    <div id="dashboardScreen" class="dashboard-container" style="display: none;">
         <div class="header-bar">
             <h1>Organizer RSVP Dashboard</h1>
             <button class="btn" onclick="downloadCSV()">⬇ Download for Excel</button>
@@ -106,82 +115,97 @@
 
         // TODO: Paste your actual Firebase Config Object here!
         const firebaseConfig = {
-            apiKey: "AIzaSyBbNCpQdK5MCBTSqScqexw3fshs7z2kezY",
-            authDomain: "baby-shower-evite.firebaseapp.com",
-            databaseURL: "https://baby-shower-evite-default-rtdb.firebaseio.com",
-            projectId: "baby-shower-evite",
-            storageBucket: "baby-shower-evite.firebasestorage.app",
-            messagingSenderId: "220534452127",
-            appId: "1:220534452127:web:c42f6d6f41e62eaf8a97aa"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // Fetch and display data
-        async function loadData() {
-            try {
-                const rsvpsRef = collection(db, "rsvps");
-                // Pulls data ordered by the newest RSVP first
-                const q = query(rsvpsRef, orderBy("timestamp", "desc"));
-                const querySnapshot = await getDocs(q);
-                
-                const tbody = document.getElementById('tableBody');
-                tbody.innerHTML = ''; // Clear loading message
-                
-                let totalAttending = 0;
-
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    
-                    // Only count guests if status is "yes"
-                    if (data.status === 'yes') {
-                        totalAttending += data.guests;
-                    }
-
-                    // Format timestamp
-                    const dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
-                    const dateStr = dateObj.toLocaleDateString();
-
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td><small>${dateStr}</small></td>
-                        <td><strong>${data.name}</strong></td>
-                        <td>${data.email}</td>
-                        <td class="status-${data.status}">${data.status.toUpperCase()}</td>
-                        <td>${data.guests}</td>
-                        <td>${data.message || ''}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-
-                document.getElementById('totalCount').innerText = totalAttending;
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="color:red; text-align:center;">Error loading data. Check console.</td></tr>';
-            }
-        }
-
-        // Run the load function immediately when the page opens
-        loadData();
+        window.db = getFirestore(app); // Made global so the loadData function can access it
     </script>
 
     <script>
+        // 1. The Password Check
+        function checkPassword() {
+            const passwordInput = document.getElementById('adminPass').value;
+            
+            // TODO: Change 'Shower2024' to whatever password you want the organizers to use
+            if (passwordInput === 'Shower2024') { 
+                
+                // Hide login screen, show dashboard
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboardScreen').style.display = 'block';
+                
+                // ONLY load the database AFTER the correct password is put in
+                loadData(); 
+            } else {
+                alert("Incorrect Password!");
+                document.getElementById('adminPass').value = ''; // clears the box
+            }
+        }
+
+        // Allow pressing "Enter" on the keyboard to submit password
+        document.getElementById("adminPass").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                checkPassword();
+            }
+        });
+
+        // 2. The Data Loader (Same as before, just wrapped to run later)
+        async function loadData() {
+            import("https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js").then(async (firestore) => {
+                try {
+                    const rsvpsRef = firestore.collection(window.db, "rsvps");
+                    const q = firestore.query(rsvpsRef, firestore.orderBy("timestamp", "desc"));
+                    const querySnapshot = await firestore.getDocs(q);
+                    
+                    const tbody = document.getElementById('tableBody');
+                    tbody.innerHTML = ''; 
+                    let totalAttending = 0;
+
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        if (data.status === 'yes') { totalAttending += data.guests; }
+
+                        const dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
+                        const dateStr = dateObj.toLocaleDateString();
+
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td><small>${dateStr}</small></td>
+                            <td><strong>${data.name}</strong></td>
+                            <td>${data.email}</td>
+                            <td class="status-${data.status}">${data.status.toUpperCase()}</td>
+                            <td>${data.guests}</td>
+                            <td>${data.message || ''}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+
+                    document.getElementById('totalCount').innerText = totalAttending;
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                    document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="color:red; text-align:center;">Error loading data. Check console.</td></tr>';
+                }
+            });
+        }
+
+        // 3. The CSV Downloader (Same as before)
         function downloadCSV() {
             const table = document.getElementById("rsvpTable");
             let rows = Array.from(table.rows);
             let csvContent = "";
-
             rows.forEach(row => {
                 let rowData = Array.from(row.cells).map(cell => {
-                    // Escapes any commas or quotes inside the guest's message so it doesn't break the Excel columns
                     let text = cell.innerText.replace(/"/g, '""'); 
                     return `"${text}"`; 
                 });
                 csvContent += rowData.join(",") + "\n";
             });
-
-            // Trigger the browser download
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             const url = URL.createObjectURL(blob);
