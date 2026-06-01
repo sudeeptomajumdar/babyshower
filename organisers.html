@@ -79,12 +79,14 @@
         <h2>Organizer Access</h2>
         <p>Please enter the password to view RSVPs.</p>
         
-        <form id="loginForm" action="javascript:void(0);" onsubmit="handleLogin(event)">
+        <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+        
+        <form id="loginForm" target="dummyframe" method="POST" action="#" onsubmit="return handleLogin()">
             
-            <input type="text" id="adminUser" autocomplete="username" value="admin" placeholder="Username" required style="padding: 10px; width: 80%; margin-bottom: 15px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="text" id="adminUser" name="username" autocomplete="username" value="admin" placeholder="Username" required style="padding: 10px; width: 80%; margin-bottom: 15px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;">
             <br>
             
-            <input type="password" id="adminPass" autocomplete="current-password" placeholder="Password" required style="padding: 10px; width: 80%; margin-bottom: 20px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;">
+            <input type="password" id="adminPass" name="password" autocomplete="current-password" placeholder="Password" required style="padding: 10px; width: 80%; margin-bottom: 20px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px;">
             <br>
             
             <button type="submit" class="btn">Log In</button>
@@ -138,21 +140,25 @@
     </script>
 
     <script>
-        // 1. The NEW Form Submission Handler
-        function handleLogin(event) {
-            // This stops the form from actually reloading the web page
-            event.preventDefault(); 
-            
+                // 1. The NEW Form Submission Handler
+        function handleLogin() {
             const passwordInput = document.getElementById('adminPass').value;
             
-            // TODO: Change 'Shower2024' to your desired password
             if (passwordInput === 'Shower2024') { 
+                // Hide login screen, show dashboard
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('dashboardScreen').style.display = 'block';
                 loadData(); 
+                
+                // NEW: Returning true allows the form to natively submit to the hidden iframe.
+                // This is the EXACT trigger the browser needs to ask "Save Password?"
+                return true; 
             } else {
                 alert("Incorrect Password!");
                 document.getElementById('adminPass').value = ''; 
+                
+                // NEW: Returning false prevents the submission so it doesn't try to save a wrong password
+                return false; 
             }
         }
 
