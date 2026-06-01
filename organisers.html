@@ -109,7 +109,7 @@
                         <th>Status</th>
                         <th>Party Size</th>
                         <th>Message</th>
-                    </tr>
+                        <th>Privacy</th> </tr>
                 </thead>
                 <tbody id="tableBody">
                     <tr><td colspan="6" style="text-align: center;">Loading data from database...</td></tr>
@@ -228,13 +228,19 @@
                         const dateStr = dateObj.toLocaleDateString();
 
                         const tr = document.createElement('tr');
+                        
+                        const safeStatus = data.status || 'unknown';
+                        const displayStatus = safeStatus.toUpperCase();
+                        
                         tr.innerHTML = `
                             <td><small>${dateStr}</small></td>
-                            <td><strong>${data.name}</strong></td>
-                            <td>${data.email}</td>
-                            <td class="status-${data.status}">${data.status.toUpperCase()}</td>
-                            <td>${data.guests}</td>
+                            <td><strong>${data.name || 'No Name'}</strong></td>
+                            <td>${data.email || 'No Email'}</td>
+                            <td class="status-${safeStatus}">${displayStatus}</td>
+                            <td>${data.guests || 0}</td>
                             <td>${data.message || ''}</td>
+                            
+                            <td style="text-transform: capitalize;">${data.privacy || 'public'}</td>
                         `;
                         tbody.appendChild(tr);
                     });
