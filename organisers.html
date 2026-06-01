@@ -144,7 +144,7 @@
             const usernameInput = document.getElementById('adminUser').value;
             const passwordInput = document.getElementById('adminPass').value;
             
-            if (passwordInput === 'Shower2024') { 
+            if (passwordInput === 'babyshower2026' && usernameInput === 'admin') { 
                 
                 // --- NEW: THE BROWSER COMMAND ---
                 // This explicitly tells the browser to prompt the user to save the password
@@ -167,7 +167,7 @@
                 loadData(); 
                 
             } else {
-                alert("Incorrect Password!");
+                alert("Incorrect Username or Password!");
                 document.getElementById('adminPass').value = ''; 
             }
         }
