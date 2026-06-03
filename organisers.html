@@ -139,17 +139,19 @@
 
     <script>
                 // 1. The NEW Form Submission Handler
-               // 1. The Form Submission Handler
+                // --- NEW: Create a variable to hold our timer ---
+        let autoRefreshTimer;
+        // ------------------------------------------------
+
+        // 1. The Form Submission Handler
         async function handleLogin(event) {
             event.preventDefault(); 
             
             const usernameInput = document.getElementById('adminUser').value;
             const passwordInput = document.getElementById('adminPass').value;
             
-            // TODO: Change 'Shower2024' to your actual password
             if (passwordInput === 'babyshower2026' && usernameInput === 'admin') { 
                 
-                // Prompt to save password in the browser
                 if (window.PasswordCredential && navigator.credentials) {
                     const cred = new PasswordCredential({
                         id: usernameInput,
@@ -162,18 +164,17 @@
                     }
                 }
 
-                // --- NEW: Calculate exactly 30 days from right now in milliseconds ---
                 const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
                 const expiryTimestamp = new Date().getTime() + thirtyDaysInMs;
-                
-                // Save that exact expiration time in permanent local storage
                 localStorage.setItem('adminAuthExpiry', expiryTimestamp);
-                // ---------------------------------------------------------------------
 
-                // Hide login screen, show dashboard
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('dashboardScreen').style.display = 'block';
                 loadData(); 
+                
+                // --- NEW: Start the 2-minute auto-refresh cycle ---
+                autoRefreshTimer = setInterval(loadData, 120000);
+                // --------------------------------------------------
                 
             } else {
                 alert("Incorrect Username or Password!");
@@ -181,29 +182,31 @@
             }
         }
 
-        // --- NEW: Log Out Function ---
+        // 2. Log Out Function
         function logout() {
-            // Permanently delete the 30-day token and lock the page
             localStorage.removeItem('adminAuthExpiry');
+            
+            // --- NEW: Stop the timer if they log out ---
+            clearInterval(autoRefreshTimer); 
+            
             window.location.reload();
         }
-        // ------------------------------
 
-        // --- NEW: Check for the 30-day token when the page opens ---
+        // 3. Check for the 30-day token when the page opens
         window.onload = function() {
             const expiryTime = localStorage.getItem('adminAuthExpiry');
             const currentTime = new Date().getTime();
 
-            // Check if the token exists AND if the current time is still BEFORE the expiration time
             if (expiryTime && currentTime < parseInt(expiryTime)) {
-                
-                // You are within the 30-day window! Skip the login screen.
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('dashboardScreen').style.display = 'block';
                 loadData();
                 
+                // --- NEW: Start the 2-minute auto-refresh cycle ---
+                autoRefreshTimer = setInterval(loadData, 120000);
+                // --------------------------------------------------
+                
             } else {
-                // If the 30 days have passed (or you never logged in), clear out any old data
                 localStorage.removeItem('adminAuthExpiry');
             }
         };
