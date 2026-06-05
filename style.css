@@ -31,41 +31,51 @@ body {
     background-color: var(--bg-color); 
 }
 
-/* THE BULLETPROOF IPHONE FIX */
-/* THE BULLETPROOF IPHONE FIX (Now perfectly zoomed for PC too!) */
-body::before {
-    content: "";
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1; 
-    
-    background-image: var(--bg-image);
-    
-    /* 'cover' zooms the image to fill the screen from edge to edge */
-    background-size: cover;
-    
-    /* 'center center' keeps the middle of your image in view, instead of pinning it to the top */
-    background-position: center 30%; 
-    
-    background-repeat: no-repeat;
-}
-
+/* 1. BASE CONTAINER (Applies to everything first) */
 .invitation-container {
     max-width: 800px;
     margin: 40px auto;
     padding: 40px;
     padding-bottom: 80px; 
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2); /* Slightly darker shadow for depth */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     text-align: var(--text-alignment);
-
-    /* CHANGED: Removes the image from the box, leaving just the semi-transparent white */
-    background-color: var(--card-bg);
     
-    /* NEW: Adds a gorgeous blurred "frosted glass" effect behind your text */
+    /* Default plain translucent white background */
+    background-color: var(--card-bg); 
+}
+
+/* 2. THE BULLETPROOF IPHONE FIX (Only applies to screens 600px or smaller) */
+@media (max-width: 600px) {
+    body::before {
+        content: "";
+        position: fixed; 
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1; 
+        
+        background-image: var(--bg-image);
+        background-size: cover;
+        background-position: center center; 
+        background-repeat: no-repeat;
+    }
+}
+
+/* 3. THE PC LAYOUT (Only applies to screens 601px or larger) */
+@media (min-width: 601px) {
+    .invitation-container {
+        /* Stacks the translucent white card color ON TOP of the image */
+        background: linear-gradient(var(--card-bg), var(--card-bg)), var(--bg-image);
+        
+        /* Zooms the image to perfectly fill the 800px white rectangle */
+        background-size: cover;
+        
+        /* Centers the image inside the box */
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
 }
 
 /* --- TYPOGRAPHY --- */
