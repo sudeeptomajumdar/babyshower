@@ -24,32 +24,35 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: var(--bg-color);
     font-family: var(--font-body);
     color: var(--text-primary);
     line-height: var(--line-spacing);
+    
+    /* NEW: The image now lives on the main page background */
+    background-image: var(--bg-image);
+    background-size: cover;
+    
+    /* Center top ensures faces/important details at the top aren't cut off */
+    background-position: center top; 
+    background-attachment: fixed;
+    background-color: var(--bg-color); /* Fallback color */
 }
 
 .invitation-container {
     max-width: 800px;
     margin: 40px auto;
     padding: 40px;
-    
-    /* NEW: Pushes main content up so animation doesn't cover text */
     padding-bottom: 80px; 
-    
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); /* Slightly darker shadow for depth */
     text-align: var(--text-alignment);
 
-    /* The Magic: Stacks the see-through white color ON TOP of your image */
-    background: linear-gradient(var(--card-bg), var(--card-bg)), var(--bg-image);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    /* CHANGED: Removes the image from the box, leaving just the semi-transparent white */
+    background-color: var(--card-bg);
     
-    /* NEW: Locks the background in place so it never stretches vertically */
-    background-attachment: fixed;
+    /* NEW: Adds a gorgeous blurred "frosted glass" effect behind your text */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px); /* Apple/Safari support */
 }
 
 /* --- TYPOGRAPHY --- */
