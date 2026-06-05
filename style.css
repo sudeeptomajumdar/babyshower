@@ -48,7 +48,7 @@ body::before {
     background-size: cover;
     
     /* 'center center' keeps the middle of your image in view, instead of pinning it to the top */
-    background-position: center center; 
+    background-position: center 30%; 
     
     background-repeat: no-repeat;
 }
