@@ -1,6 +1,6 @@
 // Import updated functions from Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, onSnapshot, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, onSnapshot, query, where, updateDoc, doc, orderBy } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
 // TODO: Replace with YOUR actual Firebase config
 const firebaseConfig = {
@@ -106,8 +106,12 @@ document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
     }
 });
 
-// Listen for RSVPs in real-time
-onSnapshot(collection(db, "rsvps"), (snapshot) => {
+// Listen for RSVPs in real-time (Sorted by newest first)
+const rsvpsRefForGuestbook = collection(db, "rsvps");
+// Use "desc" for newest messages at the top, or change to "asc" for oldest at the top
+const sortedQuery = query(rsvpsRefForGuestbook, orderBy("timestamp", "desc"));
+
+onSnapshot(sortedQuery, (snapshot) => {
     let totalAttending = 0;
     const messagesDiv = document.getElementById('publicMessages');
     messagesDiv.innerHTML = ''; 
@@ -121,7 +125,7 @@ onSnapshot(collection(db, "rsvps"), (snapshot) => {
         }
 
         // Display public messages
-        if (data.privacy === 'public' && data.message.trim() !== "") {
+        if (data.privacy === 'public' && data.message && data.message.trim() !== "") {
             const msgElement = document.createElement('div');
             msgElement.className = 'message-card';
             
@@ -138,6 +142,9 @@ onSnapshot(collection(db, "rsvps"), (snapshot) => {
             messagesDiv.appendChild(msgElement);
         }
     });
+
+    document.getElementById('totalRsvps').innerHTML = `Total Guests Attending: <strong>${totalAttending}</strong>`;
+});
 
     document.getElementById('totalRsvps').innerHTML = `Total Guests Attending: <strong>${totalAttending}</strong>`;
 });
