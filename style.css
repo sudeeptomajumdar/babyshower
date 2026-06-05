@@ -51,15 +51,14 @@ body {
     background-color: var(--card-bg); /* Translucent white default for mobile */
 }
 
-/* 3. BOTTOM REGION (Guestbook Solid Color) */
+/* 3. BOTTOM REGION (Guestbook) */
 .invite-bottom-region {
     padding: 40px;
     padding-bottom: 80px; 
     
-    /* Applies your chosen solid color! */
-    background-color: var(--guestbook-bg); 
+    /* Default for Mobile: Uses the translucent white so the full-screen image shows through! */
+    background-color: var(--card-bg); 
 }
-
 /* 4. THE BULLETPROOF IPHONE FIX (Screens 600px or smaller) */
 @media (max-width: 600px) {
     body::before {
@@ -81,11 +80,16 @@ body {
 /* 5. THE PC LAYOUT (Screens 601px or larger) */
 @media (min-width: 601px) {
     .invite-top-region {
-        /* Applies the image ONLY to the top section, completely avoiding the guestbook stretching! */
+        /* Applies the image ONLY to the top section */
         background: linear-gradient(var(--card-bg), var(--card-bg)), var(--bg-image);
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
+    }
+    
+    .invite-bottom-region {
+        /* NEW: Applies your solid color strictly on PC screens! */
+        background-color: var(--guestbook-bg); 
     }
 }
 
