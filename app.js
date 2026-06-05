@@ -112,55 +112,72 @@ document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
 // const sortedQuery = query(rsvpsRefForGuestbook, orderBy("timestamp", "desc"));
 
 // Listen for RSVPs in real-time (Sorted safely using JavaScript)
+// Listen for RSVPs in real-time (Bulletproof sorting & rendering)
 onSnapshot(collection(db, "rsvps"), (snapshot) => {
-    let totalAttending = 0;
-    const messagesDiv = document.getElementById('publicMessages');
-    messagesDiv.innerHTML = ''; 
+    try {
+        let totalAttending = 0;
+        const messagesDiv = document.getElementById('publicMessages');
+        messagesDiv.innerHTML = ''; 
 
-    // 1. Put all the database records into a standard array
-    let rsvpsArray = [];
-    snapshot.forEach((doc) => {
-        rsvpsArray.push(doc.data());
-    });
+        let rsvpsArray = [];
+        snapshot.forEach((doc) => {
+            rsvpsArray.push(doc.data());
+        });
 
-    // 2. Sort the array so newest messages are at the top
-    rsvpsArray.sort((a, b) => {
-        // Safely grab the time. If it's an old test entry with no timestamp, we default it to 0 so it just goes to the bottom!
-        const timeA = a.timestamp && a.timestamp.toMillis ? a.timestamp.toMillis() : 0;
-        const timeB = b.timestamp && b.timestamp.toMillis ? b.timestamp.toMillis() : 0;
-        return timeB - timeA; // Descending order
-    });
+        // 1. BULLETPROOF SORTING: Read the time no matter what format Firebase sends
+        rsvpsArray.sort((a, b) => {
+            let timeA = 0;
+            let timeB = 0;
 
-    // 3. Loop through the newly sorted array and build the guestbook
-    rsvpsArray.forEach((data) => {
-        
-        // ONLY count guests if their status is "yes"
-        if (data.status === 'yes') {
-            totalAttending += data.guests;
-        }
-
-        // Display public messages
-        if (data.privacy === 'public' && data.message && data.message.trim() !== "") {
-            const msgElement = document.createElement('div');
-            msgElement.className = 'message-card';
+            if (a.timestamp) {
+                if (typeof a.timestamp.toMillis === 'function') timeA = a.timestamp.toMillis();
+                else if (a.timestamp.seconds) timeA = a.timestamp.seconds * 1000;
+                else timeA = new Date(a.timestamp).getTime() || 0;
+            }
             
-            // Adds a visual cue so people know if the message writer is attending
-            let statusText = '';
-            if (data.status === 'yes') statusText = ' (Attending)';
-            if (data.status === 'maybe') statusText = ' (Maybe Attending)';
-            if (data.status === 'no') statusText = ' (Unable to Attend)';
+            if (b.timestamp) {
+                if (typeof b.timestamp.toMillis === 'function') timeB = b.timestamp.toMillis();
+                else if (b.timestamp.seconds) timeB = b.timestamp.seconds * 1000;
+                else timeB = new Date(b.timestamp).getTime() || 0;
+            }
 
-            msgElement.innerHTML = `
-                <p>"${data.message}"</p>
-                <small>- ${data.name}${statusText}</small>
-            `;
-            messagesDiv.appendChild(msgElement);
-        }
-    });
+            return timeB - timeA; 
+        });
 
-    // Update the attendance counter
-    document.getElementById('totalRsvps').innerHTML = `Total Guests Attending: <strong>${totalAttending}</strong>`;
+        // 2. Loop through the safe array
+        rsvpsArray.forEach((data) => {
+            
+            if (data.status === 'yes') {
+                // Safely convert to integer just in case it got saved as a word/string
+                totalAttending += parseInt(data.guests) || 0;
+            }
+
+            // --- NEW: If privacy is missing (from old test data), default it to public! ---
+            const safePrivacy = data.privacy || 'public';
+
+            if (safePrivacy === 'public' && data.message && data.message.trim() !== "") {
+                const msgElement = document.createElement('div');
+                msgElement.className = 'message-card';
+                
+                let statusText = '';
+                if (data.status === 'yes') statusText = ' (Attending)';
+                if (data.status === 'maybe') statusText = ' (Maybe Attending)';
+                if (data.status === 'no') statusText = ' (Unable to Attend)';
+
+                msgElement.innerHTML = `
+                    <p>"${data.message}"</p>
+                    <small>- ${data.name || 'Guest'}${statusText}</small>
+                `;
+                messagesDiv.appendChild(msgElement);
+            }
+        });
+
+        document.getElementById('totalRsvps').innerHTML = `Total Guests Attending: <strong>${totalAttending}</strong>`;
+        
+    } catch (error) {
+        // If the guestbook still crashes, this will print the exact reason to your browser console
+        console.error("Guestbook rendering error:", error);
+    }
 });
-
     document.getElementById('totalRsvps').innerHTML = `Total Guests Attending: <strong>${totalAttending}</strong>`;
 });
