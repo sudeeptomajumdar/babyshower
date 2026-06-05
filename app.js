@@ -171,7 +171,7 @@ onSnapshot(collection(db, "rsvps"), (snapshot) => {
             }
         });
 
-        document.getElementById('totalRsvps').innerHTML = `Total Guests Attending: <strong>${totalAttending}</strong>`;
+        // document.getElementById('totalRsvps').innerHTML = `Total Guests Attending: <strong>${totalAttending}</strong>`;
         
     } catch (error) {
         // If the guestbook still crashes, this will print the exact reason to your browser console
