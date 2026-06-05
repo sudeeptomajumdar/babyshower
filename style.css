@@ -32,6 +32,7 @@ body {
 }
 
 /* THE BULLETPROOF IPHONE FIX */
+/* THE BULLETPROOF IPHONE FIX (Now perfectly zoomed for PC too!) */
 body::before {
     content: "";
     position: fixed; 
@@ -42,23 +43,14 @@ body::before {
     z-index: -1; 
     
     background-image: var(--bg-image);
-    background-position: center top;
-    background-repeat: no-repeat;
     
-    /* Default: Stretches to cover tall phone screens */
+    /* 'cover' zooms the image to fill the screen from edge to edge */
     background-size: cover;
-}
-
-/* NEW: THE PC WIDE-SCREEN FIX */
-/* This rule only kicks in on monitors and laptops */
-@media (min-aspect-ratio: 1/1) {
-    body::before {
-        /* 'contain' fits the entire un-zoomed picture on the screen */
-        background-size: contain; 
-        
-        /* Centers the image directly behind your white card */
-        background-position: center center; 
-    }
+    
+    /* 'center center' keeps the middle of your image in view, instead of pinning it to the top */
+    background-position: center center; 
+    
+    background-repeat: no-repeat;
 }
 
 .invitation-container {
