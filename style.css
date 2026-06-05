@@ -47,6 +47,9 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    
+    /* NEW: Locks the background in place so it never stretches vertically */
+    background-attachment: fixed;
 }
 
 /* --- TYPOGRAPHY --- */
