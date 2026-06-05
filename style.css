@@ -4,6 +4,7 @@
     --bg-image: url('IMG-20260531-WA0000.jpg'); /* Replace with your image URL */
     --bg-color: #fdfbf7;
     --card-bg: rgba(255, 255, 255, 0.5);
+    --guestbook-bg: #ffffff;
     
     /* Typography */
     --font-headers: 'Gveret Levin', cursive;
@@ -31,21 +32,35 @@ body {
     background-color: var(--bg-color); 
 }
 
-/* 1. BASE CONTAINER (Applies to everything first) */
+/* 1. BASE CONTAINER (The outer shell) */
 .invitation-container {
     max-width: 800px;
     margin: 40px auto;
-    padding: 40px;
-    padding-bottom: 80px; 
+    /* We moved the padding to the inner regions so the backgrounds can touch the edges! */
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     text-align: var(--text-alignment);
     
-    /* Default plain translucent white background */
-    background-color: var(--card-bg); 
+    /* This strictly cuts off the square corners of the inner regions so the border-radius curves stay smooth */
+    overflow: hidden; 
 }
 
-/* 2. THE BULLETPROOF IPHONE FIX (Only applies to screens 600px or smaller) */
+/* 2. TOP REGION (Mobile Default) */
+.invite-top-region {
+    padding: 40px;
+    background-color: var(--card-bg); /* Translucent white default for mobile */
+}
+
+/* 3. BOTTOM REGION (Guestbook Solid Color) */
+.invite-bottom-region {
+    padding: 40px;
+    padding-bottom: 80px; 
+    
+    /* Applies your chosen solid color! */
+    background-color: var(--guestbook-bg); 
+}
+
+/* 4. THE BULLETPROOF IPHONE FIX (Screens 600px or smaller) */
 @media (max-width: 600px) {
     body::before {
         content: "";
@@ -63,16 +78,12 @@ body {
     }
 }
 
-/* 3. THE PC LAYOUT (Only applies to screens 601px or larger) */
+/* 5. THE PC LAYOUT (Screens 601px or larger) */
 @media (min-width: 601px) {
-    .invitation-container {
-        /* Stacks the translucent white card color ON TOP of the image */
+    .invite-top-region {
+        /* Applies the image ONLY to the top section, completely avoiding the guestbook stretching! */
         background: linear-gradient(var(--card-bg), var(--card-bg)), var(--bg-image);
-        
-        /* Zooms the image to perfectly fill the 800px white rectangle */
         background-size: cover;
-        
-        /* Centers the image inside the box */
         background-position: center center;
         background-repeat: no-repeat;
     }
