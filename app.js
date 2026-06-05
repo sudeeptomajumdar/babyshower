@@ -111,7 +111,6 @@ document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
 // Use "desc" for newest messages at the top, or change to "asc" for oldest at the top
 // const sortedQuery = query(rsvpsRefForGuestbook, orderBy("timestamp", "desc"));
 
-// Listen for RSVPs in real-time (Sorted safely using JavaScript)
 // Listen for RSVPs in real-time (Bulletproof sorting & rendering)
 onSnapshot(collection(db, "rsvps"), (snapshot) => {
     try {
@@ -178,6 +177,4 @@ onSnapshot(collection(db, "rsvps"), (snapshot) => {
         // If the guestbook still crashes, this will print the exact reason to your browser console
         console.error("Guestbook rendering error:", error);
     }
-});
-    document.getElementById('totalRsvps').innerHTML = `Total Guests Attending: <strong>${totalAttending}</strong>`;
 });
