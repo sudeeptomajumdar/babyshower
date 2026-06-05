@@ -116,6 +116,12 @@ onSnapshot(collection(db, "rsvps"), (snapshot) => {
     try {
         let totalAttending = 0;
         const messagesDiv = document.getElementById('publicMessages');
+        const totalRsvpsDiv = document.getElementById('totalRsvps');
+
+        // --- NEW: THE SAFETY NET ---
+        // If these boxes don't exist on the current page (like on the organizer dashboard), stop running this block silently!
+        if (!messagesDiv || !totalRsvpsDiv) return; 
+        // ---------------------------
         messagesDiv.innerHTML = ''; 
 
         let rsvpsArray = [];
