@@ -107,17 +107,32 @@ document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
 });
 
 // Listen for RSVPs in real-time (Sorted by newest first)
-const rsvpsRefForGuestbook = collection(db, "rsvps");
+// const rsvpsRefForGuestbook = collection(db, "rsvps");
 // Use "desc" for newest messages at the top, or change to "asc" for oldest at the top
-const sortedQuery = query(rsvpsRefForGuestbook, orderBy("timestamp", "desc"));
+// const sortedQuery = query(rsvpsRefForGuestbook, orderBy("timestamp", "desc"));
 
-onSnapshot(sortedQuery, (snapshot) => {
+// Listen for RSVPs in real-time (Sorted safely using JavaScript)
+onSnapshot(collection(db, "rsvps"), (snapshot) => {
     let totalAttending = 0;
     const messagesDiv = document.getElementById('publicMessages');
     messagesDiv.innerHTML = ''; 
 
+    // 1. Put all the database records into a standard array
+    let rsvpsArray = [];
     snapshot.forEach((doc) => {
-        const data = doc.data();
+        rsvpsArray.push(doc.data());
+    });
+
+    // 2. Sort the array so newest messages are at the top
+    rsvpsArray.sort((a, b) => {
+        // Safely grab the time. If it's an old test entry with no timestamp, we default it to 0 so it just goes to the bottom!
+        const timeA = a.timestamp && a.timestamp.toMillis ? a.timestamp.toMillis() : 0;
+        const timeB = b.timestamp && b.timestamp.toMillis ? b.timestamp.toMillis() : 0;
+        return timeB - timeA; // Descending order
+    });
+
+    // 3. Loop through the newly sorted array and build the guestbook
+    rsvpsArray.forEach((data) => {
         
         // ONLY count guests if their status is "yes"
         if (data.status === 'yes') {
@@ -143,6 +158,7 @@ onSnapshot(sortedQuery, (snapshot) => {
         }
     });
 
+    // Update the attendance counter
     document.getElementById('totalRsvps').innerHTML = `Total Guests Attending: <strong>${totalAttending}</strong>`;
 });
 
