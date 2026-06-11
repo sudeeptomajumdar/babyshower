@@ -282,42 +282,48 @@
             document.body.removeChild(link);
         }
 
-                // --- NEW: Download Yes/Maybe Emails as a comma-separated text file ---
-        async function downloadEmails() {
+        // --- NEW: Download Yes/Maybe Emails straight from the HTML Table (Zero Firebase reads!) ---
+        function downloadEmails() {
             try {
-                // 1. Fetch all RSVPs from the database
-                const querySnapshot = await getDocs(collection(db, "rsvps"));
                 let emailList = [];
+                
+                // 1. Grab every single row currently sitting in your dashboard table
+                const rows = document.querySelectorAll('#rsvpTableBody tr');
 
-                // 2. Loop through and filter for Yes/Maybe
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    
-                    // If they are attending (or might attend) AND they provided an email address
-                    if ((data.status === 'yes' || data.status === 'maybe') && data.email) {
-                        // Clean up any accidental spaces around the email and add it to our list
-                        emailList.push(data.email.trim().toLowerCase());
+                // 2. Loop through the rows one by one
+                rows.forEach(row => {
+                    // Make sure the row actually has columns before checking
+                    if (row.cells.length > 3) {
+                        
+                        // In your table, Email is the 3rd column (index 2) and Status is the 4th (index 3)
+                        const email = row.cells[2].innerText.trim().toLowerCase();
+                        const status = row.cells[3].innerText.trim().toLowerCase();
+
+                        // 3. If attending (or maybe) AND they didn't leave the email blank, add them!
+                        if ((status === 'yes' || status === 'maybe') && email !== '' && email !== 'no email') {
+                            emailList.push(email);
+                        }
                     }
                 });
 
-                // 3. Remove any duplicate emails (in case a couple RSVP'd separately with the same shared email)
+                // 4. Remove any duplicate emails 
                 const uniqueEmails = [...new Set(emailList)];
 
-                // 4. Check if we actually found any emails
+                // 5. Check if we actually found any valid emails
                 if (uniqueEmails.length === 0) {
                     alert("No emails found for 'Yes' or 'Maybe' RSVPs yet!");
                     return;
                 }
 
-                // 5. Join them all together with a comma and a space
+                // 6. Join them all together with a comma and a space
                 const finalEmailString = uniqueEmails.join(", ");
 
-                // 6. Create a downloadable text file behind the scenes
+                // 7. Create a downloadable text file behind the scenes
                 const blob = new Blob([finalEmailString], { type: 'text/plain;charset=utf-8;' });
                 const link = document.createElement("a");
                 const url = URL.createObjectURL(blob);
                 
-                // 7. Trigger the invisible download
+                // 8. Trigger the invisible download
                 link.setAttribute("href", url);
                 link.setAttribute("download", "Reminder_Emails.txt");
                 link.style.visibility = 'hidden';
@@ -326,11 +332,11 @@
                 document.body.removeChild(link);
 
             } catch (error) {
-                console.error("Error downloading emails: ", error);
+                console.error("Error extracting emails from table: ", error);
                 alert("Failed to extract emails. Please check the console.");
             }
         }
-        // ---------------------------------------------------------------------
+        // --------------------------------------------------------------------------------------
     </script>
 </body>
 </html>
