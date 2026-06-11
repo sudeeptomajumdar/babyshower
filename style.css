@@ -59,6 +59,40 @@ body {
     /* Default for Mobile: Uses the translucent white so the full-screen image shows through! */
     background-color: var(--card-bg); 
 }
+
+/* --- NEW: PHOTO SHARING SECTION --- */
+.photo-share-section {
+    margin-top: 40px;
+    padding-top: 30px;
+    /* Adds a very subtle, elegant line to separate it from the parking info */
+    border-top: 1px solid rgba(0, 0, 0, 0.1); 
+    text-align: center;
+}
+
+.photo-btn {
+    display: inline-block;
+    background-color: #2b7a78; /* A nice, calm accent color (change if you prefer!) */
+    color: #ffffff;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    margin: 10px 0;
+    transition: opacity 0.3s ease;
+}
+
+.photo-btn:hover {
+    opacity: 0.8;
+}
+
+.qr-code {
+    max-width: 150px; /* Keeps the QR code from being overwhelmingly massive */
+    height: auto;
+    margin-top: 10px;
+    border-radius: 8px;
+    /* Adds a soft shadow so the QR code pops off the page nicely */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15); 
+}
 /* 4. THE BULLETPROOF IPHONE FIX (Screens 600px or smaller) */
 @media (max-width: 600px) {
     body::before {
