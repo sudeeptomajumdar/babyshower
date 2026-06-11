@@ -89,10 +89,14 @@
     </div>
 
     <div id="dashboardScreen" class="dashboard-container" style="display: none;">
-                <div class="header-bar">
+        <div class="header-bar">
             <h1>Organizer RSVP Dashboard</h1>
+            <h3 id="dashboardStats" style="color: #6b8e23; margin: 10px 0;">Total Attending: 0 | Remaining Quota: 0</h3>
             <div>
                 <button class="btn" onclick="logout()" style="background-color: #555; margin-right: 10px;">Log Out</button>
+                
+                <button class="btn" onclick="downloadEmails()" style="background-color: #2b7a78; margin-right: 10px;">📩 Get Reminder Emails</button>
+                
                 <button class="btn" onclick="downloadCSV()">⬇ Download for Excel</button>
             </div>
         </div>
