@@ -282,26 +282,32 @@
             document.body.removeChild(link);
         }
 
-        // --- NEW: Download Yes/Maybe Emails straight from the HTML Table (Zero Firebase reads!) ---
+        // --- NEW: Bulletproof Smart Scanner for Reminder Emails ---
         function downloadEmails() {
             try {
                 let emailList = [];
-                
-                // 1. Grab every single row currently sitting in your dashboard table
                 const rows = document.querySelectorAll('#rsvpTableBody tr');
+                let attendingCount = 0;
 
-                // 2. Loop through the rows one by one
+                // 1. Loop through every row in the table
                 rows.forEach(row => {
-                    // Make sure the row actually has columns before checking
-                    if (row.cells.length > 3) {
-                        
-                        // In your table, Email is the 3rd column (index 2) and Status is the 4th (index 3)
-                        const email = row.cells[2].innerText.trim().toLowerCase();
-                        const status = row.cells[3].innerText.trim().toLowerCase();
+                    const rowText = row.innerText.toLowerCase();
+                    
+                    // 2. Check if this person is coming (matches yes, maybe, or attending)
+                    const isAttending = rowText.includes('yes') || rowText.includes('maybe') || rowText.includes('attending');
 
-                        // 3. If attending (or maybe) AND they didn't leave the email blank, add them!
-                        if ((status === 'yes' || status === 'maybe') && email !== '' && email !== 'no email') {
-                            emailList.push(email);
+                    if (isAttending) {
+                        attendingCount++; // Keep track of how many attendees we found
+                        
+                        // 3. Scan every single box in this row looking for an email format
+                        for (let i = 0; i < row.cells.length; i++) {
+                            const cellText = row.cells[i].innerText.trim().toLowerCase();
+                            
+                            // If the box has an '@' and a '.', we know it's a valid email!
+                            if (cellText.includes('@') && cellText.includes('.')) {
+                                emailList.push(cellText);
+                                break; // Found the email, stop looking in this row
+                            }
                         }
                     }
                 });
@@ -309,21 +315,25 @@
                 // 4. Remove any duplicate emails 
                 const uniqueEmails = [...new Set(emailList)];
 
-                // 5. Check if we actually found any valid emails
+                // 5. Smart Error Handling
+                if (attendingCount === 0) {
+                    alert("Could not find any rows marked as 'Yes' or 'Maybe'.");
+                    return;
+                }
                 if (uniqueEmails.length === 0) {
-                    alert("No emails found for 'Yes' or 'Maybe' RSVPs yet!");
+                    alert(`Found ${attendingCount} attending RSVPs, but none of them had a valid email address containing an '@' symbol!`);
                     return;
                 }
 
                 // 6. Join them all together with a comma and a space
                 const finalEmailString = uniqueEmails.join(", ");
 
-                // 7. Create a downloadable text file behind the scenes
+                // 7. Create the downloadable text file
                 const blob = new Blob([finalEmailString], { type: 'text/plain;charset=utf-8;' });
                 const link = document.createElement("a");
                 const url = URL.createObjectURL(blob);
                 
-                // 8. Trigger the invisible download
+                // 8. Trigger the download
                 link.setAttribute("href", url);
                 link.setAttribute("download", "Reminder_Emails.txt");
                 link.style.visibility = 'hidden';
@@ -336,7 +346,7 @@
                 alert("Failed to extract emails. Please check the console.");
             }
         }
-        // --------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------
     </script>
 </body>
 </html>
