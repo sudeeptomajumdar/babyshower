@@ -68,30 +68,39 @@ body {
     border-top: 1px solid rgba(0, 0, 0, 0.1); 
     text-align: center;
 }
+/* NEW: The Flexbox container that puts them side-by-side */
+.photo-actions {
+    display: flex;
+    justify-content: center; /* Centers everything perfectly */
+    align-items: center;     /* Aligns them vertically so the button doesn't float too high */
+    gap: 30px;               /* Puts exactly 30px of empty space between the button and QR code */
+    flex-wrap: wrap;         /* Safety feature: if a phone screen is super tiny, they will safely stack instead of breaking off the screen */
+}
 
+/* UPDATED: Removed margins since Flexbox handles the spacing now */
 .photo-btn {
     display: inline-block;
-    background-color: #2b7a78; /* A nice, calm accent color (change if you prefer!) */
+    background-color: #2b7a78; 
     color: #ffffff;
     padding: 12px 24px;
     text-decoration: none;
     border-radius: 8px;
     font-weight: bold;
-    margin: 10px 0;
     transition: opacity 0.3s ease;
+    margin: 0; 
 }
 
 .photo-btn:hover {
     opacity: 0.8;
 }
 
+/* UPDATED: Shrunk slightly to balance perfectly next to the button */
 .qr-code {
-    max-width: 150px; /* Keeps the QR code from being overwhelmingly massive */
+    max-width: 120px; 
     height: auto;
-    margin-top: 10px;
     border-radius: 8px;
-    /* Adds a soft shadow so the QR code pops off the page nicely */
     box-shadow: 0 4px 15px rgba(0,0,0,0.15); 
+    margin: 0; 
 }
 /* 4. THE BULLETPROOF IPHONE FIX (Screens 600px or smaller) */
 @media (max-width: 600px) {
