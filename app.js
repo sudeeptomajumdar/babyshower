@@ -18,6 +18,8 @@ const db = getFirestore(app);
 
 // --- NEW: Auto-populate form when email is entered ---
 // The 'blur' event fires the moment they click or tab out of the email box
+const email = document.getElementById('email')
+if (email) {
 document.getElementById('email').addEventListener('blur', async (e) => {
     const emailInput = e.target.value.trim().toLowerCase();
     
@@ -57,8 +59,11 @@ document.getElementById('email').addEventListener('blur', async (e) => {
         console.error("Error fetching existing RSVP:", error);
     }
 });
+}
 // -----------------------------------------------------
 // Handle Form Submission (Create or Update)
+const rsvpFormElement = document.getElementById('rsvpForm');
+if (rsvpFormElement) {
 document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
@@ -105,6 +110,7 @@ document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
         alert("There was an error submitting your RSVP. Please try again.");
     }
 });
+}
 
 // Listen for RSVPs in real-time (Sorted by newest first)
 // const rsvpsRefForGuestbook = collection(db, "rsvps");
